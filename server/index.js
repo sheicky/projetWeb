@@ -1,6 +1,11 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+
+// Load environment variables from .env file
+dotenv.config();
 
 const app = express();
 
@@ -8,11 +13,27 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-const posts = require('./routes/api/posts');
+// Check and log the MongoDB connection URI
+console.log('MONGO_URI:', process.env.MONGO_URI);
 
-app.use('/api/posts', posts);
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => {
+    console.log('Connected to MongoDB');
+}).catch(err => {
+    console.error('Error connecting to MongoDB', err);
+});
 
-const port = process.env.PORT || 5000;
+// Import routes
+const authRoutes = require('./routes/api/auth');
 
-app.listen(port, () => console.log(`Server started on port ${port}`));
+// Use routes
+app.use('/api/auth', authRoutes);
 
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
