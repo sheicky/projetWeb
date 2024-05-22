@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const User = require('./models/User');
 
 // Load environment variables from .env file
 dotenv.config();
