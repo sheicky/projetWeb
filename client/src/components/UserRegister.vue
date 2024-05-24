@@ -4,28 +4,28 @@
       <div class="col-md-6">
         <div class="card">
           <div class="card-header text-center">
-            <h3>Register</h3>
+            <h3>S'inscrire</h3>
           </div>
           <div class="card-body">
-            <form @submit.prevent="register">
+            <form @submit.prevent="registerUser">
               <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" v-model="name" class="form-control" id="name" placeholder="Name" required>
+                <label for="name">Nom</label>
+                <input type="text" v-model="name" class="form-control" id="name" required>
               </div>
               <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" v-model="email" class="form-control" id="email" placeholder="Email" required>
+                <input type="email" v-model="email" class="form-control" id="email" required>
               </div>
               <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" v-model="password" class="form-control" id="password" placeholder="Password" required>
+                <label for="password">Mot de passe</label>
+                <input type="password" v-model="password" class="form-control" id="password" required>
               </div>
-              <button type="submit" class="btn btn-primary btn-block">Register</button>
+              <button type="submit" class="btn btn-primary btn-block">S'inscrire</button>
             </form>
-            <p v-if="error" class="text-danger mt-3">{{ error }}</p>
+            <div v-if="error" class="alert alert-danger mt-3">{{ error }}</div>
           </div>
         </div>
-        <button @click="goBack" class="btn btn-link mt-3">Back</button>
+        <button @click="goBack" class="btn btn-link mt-3">Retour</button>
       </div>
     </div>
   </div>
@@ -44,7 +44,7 @@ export default {
     };
   },
   methods: {
-    async register() {
+    async registerUser() {
       try {
         await axios.post('http://localhost:5000/api/auth/register', {
           name: this.name,
@@ -53,7 +53,7 @@ export default {
         });
         this.$router.push('/login');
       } catch (err) {
-        this.error = 'User already exists';
+        this.error = 'Utilisateur existe déjà';
       }
     },
     goBack() {

@@ -9,20 +9,15 @@
           <div class="card-body">
             <form @submit.prevent="resetPassword">
               <div class="form-group">
-                <label for="password">New Password</label>
-                <input
-                  type="password"
-                  v-model="password"
-                  class="form-control"
-                  id="password"
-                  placeholder="Enter new password"
-                  required
-                />
+                <label for="email">Email</label>
+                <input type="email" v-model="email" class="form-control" id="email" required>
+              </div>
+              <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <input type="password" v-model="newPassword" class="form-control" id="newPassword" required>
               </div>
               <button type="submit" class="btn btn-primary btn-block">Reset Password</button>
             </form>
-            <div v-if="error" class="alert alert-danger mt-3">{{ error }}</div>
-            <div v-if="message" class="alert alert-success mt-3">{{ message }}</div>
             <div class="mt-3 text-center">
               <router-link to="/login" class="btn btn-secondary btn-sm">Back to Login</router-link>
             </div>
@@ -40,7 +35,8 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      password: '',
+      email: '',
+      newPassword: '',
       error: '',
       message: ''
     };
@@ -48,13 +44,14 @@ export default {
   methods: {
     async resetPassword() {
       try {
-        await axios.post(`http://localhost:5000/api/auth/reset-password/${this.$route.params.resetToken}`, {
-          password: this.password
+        await axios.post('http://localhost:5000/api/auth/reset-password', {
+          email: this.email,
+          newPassword: this.newPassword
         });
         this.message = 'Password reset successful';
         this.$router.push('/login');
       } catch (err) {
-        this.error = 'Invalid token or token expired';
+        this.error = 'Error resetting password';
       }
     },
     goBack() {
@@ -63,13 +60,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.container {
-  margin-top: 100px;
-}
-.card-header {
-  background-color: #007bff;
-  color: white;
-}
-</style>

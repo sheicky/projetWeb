@@ -1,25 +1,28 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Login from './components/UserLogin.vue';
-import Register from './components/UserRegister.vue';
+import HelloWorld from './components/HelloWorld.vue';
+import UserLogin from './components/UserLogin.vue';
+import UserRegister from './components/UserRegister.vue';
+import ForgotPassword from './components/ForgotPassword.vue';
 import ResetPassword from './components/ResetPassword.vue';
-import UpdatePassword from './components/UpdatePassword.vue';
-import VerifyEmail from './components/VerifyEmail.vue';
 import UserDashboard from './components/UserDashboard.vue';
 import AdminDashboard from './components/AdminDashboard.vue';
 import AdminLogin from './components/AdminLogin.vue';
-import ForgotPassword from './components/ForgotPassword.vue';
+import UpdatePassword from './components/UpdatePassword.vue';
+import UserPanier from './components/UserPanier.vue';  // Import du composant Cart
+import UserPayment from './components/UserPayment.vue';  // Import du composant Payment
 
 const routes = [
-  { path: '/', redirect: '/login' },
-  { path: '/login', component: Login },
-  { path: '/register', component: Register },
+  { path: '/', component: HelloWorld },
+  { path: '/login', component: UserLogin },
+  { path: '/register', component: UserRegister },
   { path: '/forgot-password', component: ForgotPassword },
-  { path: '/reset-password/:resetToken', component: ResetPassword },
-  { path: '/update-password', component: UpdatePassword },
-  { path: '/verify-email', component: VerifyEmail },
-  { path: '/user', component: UserDashboard, meta: { requiresAuth: true } },
-  { path: '/admin', component: AdminDashboard, meta: { requiresAuth: true, requiresAdmin: true } },
-  { path: '/admin-login', component: AdminLogin },
+  { path: '/reset-password', component: ResetPassword },
+  { path: '/dashboard', component: UserDashboard, meta: { requiresAuth: true } },
+  { path: '/admin/dashboard', component: AdminDashboard, meta: { requiresAuth: true, requiresAdmin: true } },
+  { path: '/admin/login', component: AdminLogin },
+  { path: '/update-password', component: UpdatePassword, meta: { requiresAuth: true } },
+  { path: '/UserPanier', component: UserPanier, meta: { requiresAuth: true } },  // Route pour le panier utilisateur
+  { path: '/UserPayment', component: UserPayment, meta: { requiresAuth: true } }  // Route pour le paiement
 ];
 
 const router = createRouter({
@@ -36,7 +39,7 @@ router.beforeEach((to, from, next) => {
       next('/login');
     } else if (to.matched.some(record => record.meta.requiresAdmin)) {
       if (user.role !== 'admin') {
-        next('/user');
+        next('/dashboard');
       } else {
         next();
       }
